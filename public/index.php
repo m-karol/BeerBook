@@ -1,20 +1,14 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../app/Core/Database.php';
+require __DIR__ . '/../app/Core/Autoloader.php';
 
-use App\Core\Database;
+use App\Core\Autoloader;
+use App\Core\Router;
 
-try {
-    $db = Database::getInstance()->getConnection();
-    $stmt = $db->query('SELECT NOW() as current_time');
-    $row = $stmt->fetch();
-    echo "Connected to database!";
-    echo "<br>";
-    echo "Server time: " . htmlspecialchars($row['current_time']) . "<br>";
-} catch (Throwable $e) {
-    http_response_code(500);
-    echo "Database connection failed!";
-    echo "<br>";
-    echo htmlspecialchars($e->getMessage());
-}
+// Register custom autoloader
+Autoloader::register();
+
+// Boot the router
+$router = new Router(__DIR__ . '/../app/routes.php');
+$router->dispatch($_SERVER['REQUEST_URI']);
