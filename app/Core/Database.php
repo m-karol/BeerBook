@@ -52,7 +52,7 @@ class Database {
         return $statement;
     }
 
-    private function __wakeup() {}
+    public function __wakeup() {}
     private function __clone() {}
 
 }

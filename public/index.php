@@ -11,4 +11,4 @@ Autoloader::register();
 
 // Boot the router
 $router = new Router(__DIR__ . '/../app/routes.php');
-$router->dispatch($_SERVER['REQUEST_URI']);
+$router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

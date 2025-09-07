@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Core;
@@ -13,16 +14,17 @@ class Router {
         $this->routes = require $routesFile;
     }
 
-    public function dispatch(string $uri): void {
+    public function dispatch(string $uri, string $method): void {
         $path = parse_url($uri, PHP_URL_PATH);
+        $method = strtoupper($method);
 
-        if (!isset($this->routes[$path])) {
+        if (!isset($this->routes[$method][$path])) {
             http_response_code(404);
             echo "<h1>404 Not Found</h1>";
             return;
         }
 
-        [$controllerName, $method] = $this->routes[$path];
+        [$controllerName, $action] = $this->routes[$method][$path];
         $controllerClass = "\\App\\Controllers\\$controllerName";
 
         if (!class_exists($controllerClass)) {
@@ -33,13 +35,12 @@ class Router {
 
         $controller = new $controllerClass();
 
-        if (!method_exists($controller, $method)) {
+        if (!method_exists($controller, $action)) {
             http_response_code(500);
-            echo "<h1>Method $method not found in $controllerClass</h1>";
+            echo "<h1>Method $action not found in $controllerClass</h1>";
             return;
         }
 
-        $controller->$method();
-
+        $controller->$action();
     }
 }
