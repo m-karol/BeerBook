@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?= htmlspecialchars($article['title']) ?></title>
+</head>
+<body>
+<h1><?= htmlspecialchars($article['title']) ?></h1>
+<p>by <?= htmlspecialchars($article['username']) ?> on <?= $article['created_at'] ?></p>
+<div><?= nl2br(htmlspecialchars($article['content'])) ?></div>
+
+<hr>
+<h2>Comments</h2>
+<?php if ($comments): ?>
+    <?php foreach ($comments as $comment): ?>
+        <p><strong><?= htmlspecialchars($comment['username']) ?>:</strong>
+            <?= nl2br(htmlspecialchars($comment['content'])) ?>
+            <br><small><?= $comment['created_at'] ?></small></p>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No comments yet.</p>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['user_id'])): ?>
+    <form method="POST" action="/articles/<?= $article['id'] ?>/comments">
+        <textarea name="content" required></textarea><br>
+        <button type="submit">Post Comment</button>
+    </form>
+<?php else: ?>
+    <p><a href="/login">Log in</a> to comment.</p>
+<?php endif; ?>
+</body>
+</html>

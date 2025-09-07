@@ -10,10 +10,13 @@ return [
         '/login'   => ['AuthController', 'showLoginForm'],
         '/logout'    => ['AuthController', 'logout'],
         '/articles/create' => ['ArticleController', 'createForm'],
+        '/articles'        => ['ArticleController', 'index'],
+        '/articles/{id}' => ['ArticleController', 'show'],
     ],
     'POST' => [
         '/register' => ['AuthController', 'register'],
         '/login'    => ['AuthController', 'login'],
         '/articles/create' => ['ArticleController', 'store'],
+        '/articles/{id}/comments' => ['CommentController', 'store'],
     ]
 ];
