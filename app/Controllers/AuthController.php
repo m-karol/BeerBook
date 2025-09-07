@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Core\Database;
 use App\Core\Redirect;
 
-class AuthController
-{
+class AuthController {
     public function showRegisterForm(): void {
         require __DIR__ . '/../views/register.html';
     }
@@ -16,7 +16,7 @@ class AuthController
     public function register(): void {
         $username = trim($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
-        $confirm  = $_POST['confirm'] ?? '';
+        $confirm = $_POST['confirm'] ?? '';
 
         if ($username === '' || $password === '' || $confirm === '') {
             echo "All fields are required.";
@@ -50,11 +50,50 @@ class AuthController
     }
 
     public function showLoginForm(): void {
-        echo "<h1>Login Page (to be implemented)</h1>";
+        if (Auth::check()) {
+            Redirect::to('/');
+        }
+
+        require __DIR__ . '/../views/login.html';
     }
 
     public function login(): void {
-        echo "Login handling (to be implemented)";
+        if (Auth::check()) {
+            Redirect::to('/');
+        }
+
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if ($username === '' || $password === '') {
+            echo "Both fields are required.";
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT id, username, password_hash, role FROM users WHERE username = :username");
+        $stmt->execute([':username' => $username]);
+        $user = $stmt->fetch();
+
+        if (!$user || !password_verify($password, $user['password_hash'])) {
+            echo "Invalid username or password.";
+            return;
+        }
+
+        $_SESSION['user'] = [
+            'id' => $user['id'],
+            'username' => $user['username'],
+            'role' => $user['role'],
+        ];
+
+        Redirect::to('/');
+    }
+
+
+    public function logout(): void {
+        unset($_SESSION['user']);
+        session_destroy();
+        Redirect::to('/login');
     }
 
 }

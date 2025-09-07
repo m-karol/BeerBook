@@ -7,10 +7,13 @@ return [
         '/'        => ['HomeController', 'index'],
         '/about'   => ['HomeController', 'about'],
         '/register' => ['AuthController', 'showRegisterForm'],
-        '/login'   => ['AuthController', 'showLoginForm'], // placeholder
+        '/login'   => ['AuthController', 'showLoginForm'],
+        '/logout'    => ['AuthController', 'logout'],
+        '/articles/create' => ['ArticleController', 'createForm'],
     ],
     'POST' => [
         '/register' => ['AuthController', 'register'],
-        '/login'    => ['AuthController', 'login'], // placeholder
+        '/login'    => ['AuthController', 'login'],
+        '/articles/create' => ['ArticleController', 'store'],
     ]
 ];

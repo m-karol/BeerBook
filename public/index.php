@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+session_start(); // start session for login system
+
 require __DIR__ . '/../app/Core/Autoloader.php';
 
 use App\Core\Autoloader;
