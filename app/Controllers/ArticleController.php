@@ -13,11 +13,18 @@ class ArticleController
         $stmt = $db->query("SELECT id, title FROM articles ORDER BY created_at DESC");
         $articles = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/articles/index.php';
+        require __DIR__ . '/../views/articles.html.php';
     }
 
     public function createForm(): void {
-        require __DIR__ . '/../views/articles/create.html';
+
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(403);
+            echo "You must be logged in to create an article.";
+            return;
+        }
+
+        require __DIR__ . '/../views/articles/create.html.php';
     }
 
     public function store(): void {
@@ -73,6 +80,6 @@ class ArticleController
         $stmt->execute([':id' => $id]);
         $comments = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/show.html';
+        require __DIR__ . '/../views/show.html.php';
     }
 }

@@ -4,27 +4,37 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Auth;
 use App\Core\Database;
 use App\Core\Redirect;
 
-class AuthController {
+class AuthController
+{
     public function showRegisterForm(): void {
-        require __DIR__ . '/../views/register.html';
+        require __DIR__ . '/../views/register.html.php';
     }
 
     public function register(): void {
         $username = trim($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
-        $confirm = $_POST['confirm'] ?? '';
+        $confirm  = $_POST['confirm'] ?? '';
 
         if ($username === '' || $password === '' || $confirm === '') {
-            echo "All fields are required.";
+            $title = "Register";
+            $error = "All fields are required.";
+            ob_start();
+            echo "<p style='color:red;'>$error</p>";
+            $content = ob_get_clean();
+            require __DIR__ . '/../views/layout.html.php';
             return;
         }
 
         if ($password !== $confirm) {
-            echo "Passwords do not match.";
+            $title = "Register";
+            $error = "Passwords do not match.";
+            ob_start();
+            echo "<p style='color:red;'>$error</p>";
+            $content = ob_get_clean();
+            require __DIR__ . '/../views/layout.html.php';
             return;
         }
 
@@ -33,7 +43,12 @@ class AuthController {
         $stmt = $db->prepare("SELECT id FROM users WHERE username = :username");
         $stmt->execute([':username' => $username]);
         if ($stmt->fetch()) {
-            echo "Username already taken.";
+            $title = "Register";
+            $error = "Username already taken.";
+            ob_start();
+            echo "<p style='color:red;'>$error</p>";
+            $content = ob_get_clean();
+            require __DIR__ . '/../views/layout.html.php';
             return;
         }
 
@@ -50,50 +65,22 @@ class AuthController {
     }
 
     public function showLoginForm(): void {
-        if (Auth::check()) {
-            Redirect::to('/');
-        }
-
-        require __DIR__ . '/../views/login.html';
+        require __DIR__ . '/../views/login.html.php';
     }
 
     public function login(): void {
-        if (Auth::check()) {
-            Redirect::to('/');
-        }
-
-        $username = trim($_POST['username'] ?? '');
-        $password = $_POST['password'] ?? '';
-
-        if ($username === '' || $password === '') {
-            echo "Both fields are required.";
-            return;
-        }
-
-        $db = Database::getInstance()->getConnection();
-        $stmt = $db->prepare("SELECT id, username, password_hash, role FROM users WHERE username = :username");
-        $stmt->execute([':username' => $username]);
-        $user = $stmt->fetch();
-
-        if (!$user || !password_verify($password, $user['password_hash'])) {
-            echo "Invalid username or password.";
-            return;
-        }
-
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'username' => $user['username'],
-            'role' => $user['role'],
-        ];
-
-        Redirect::to('/');
+        require __DIR__ . '/../views/articles.html.php';
     }
 
-
     public function logout(): void {
-        unset($_SESSION['user']);
+
+        // Clear session data
+        $_SESSION = [];
         session_destroy();
-        Redirect::to('/login');
+
+        // Redirect to home
+        header("Location: /");
+        exit;
     }
 
 }

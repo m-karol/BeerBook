@@ -6,12 +6,10 @@ namespace App\Controllers;
 class HomeController
 {
     public function index(): void {
-        echo "<h1>Hello from HomeController::index()</h1>";
-        echo "<p>If you see this, routing works!</p>";
+        require __DIR__ . '/../views/home.html.php';
     }
 
     public function about(): void {
-        echo "<h1>About Page</h1>";
-        echo "<p>This is a simple test page served via Router.</p>";
+        require __DIR__ . '/../views/about.html.php';
     }
 }
