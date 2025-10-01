@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: ./server
+    container_name: forum_app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: pgdb
+      DB_USER: pguser
+      DB_PASSWORD: 1324
+    networks:
+      - forum_net
+
+  db:
+    image: docker.io/library/postgres:16
+    container_name: forum_db
+    restart: always
+    environment:
+      POSTGRES_DB: pgdb
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: 1324
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - forum_net
+
+volumes:
+  db_data:
+
+networks:
+  forum_net:

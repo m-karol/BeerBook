@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title|default('BeerBook') }}</title>
+    <link rel="stylesheet" href="/content/css/style.css">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍺</text></svg>"
+    />
+    <script defer src="/content/js/index.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h1 class="site-title"><a href="/">BeerBook 🍺</a></h1>
+        <nav class="nav-bar">
+            {% if loggedIn %}
+                <a href="/">Forum</a>
+                <a href="#" id="newPostLink">NewPost</a>
+                <a href="#" id="randomPostLink">Random post</a>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+            <button id="modal-close">Close</button>
+        </div>
+    </div>
+</body>
+</html>
