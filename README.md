@@ -11,7 +11,7 @@ Directory Structure:
 Building and Running
 
 ```bash
-    docker-compose up --build
+    docker compose up --build
 ```
 
 The site is served at http://localhost:8080
