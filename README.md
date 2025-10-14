@@ -2,12 +2,11 @@
 
 This is a simple PHP forum website with user registration, login, posts, and comments. The project uses PostgreSQL for the database and can be run with Docker Compose.
 
-Directory Structure
-
+Directory Structure:
 
 - `templates` contains Twig templates for rendering views
 - `server` contains PHP application code
-- `server/migrations` contains SQL migrations, including init.sql
+- `server/migrations` contains SQL migrations, including init.php
 
 Building and Running
 
