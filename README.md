@@ -17,4 +17,4 @@ Building and Running
 The site is served at http://localhost:8080
 
 ERD:
-![alt text](m-karol/BeerBook/refs/heads/main/ERD.png)
+![alt text](https://raw.githubusercontent.com/m-karol/BeerBook/refs/heads/main/ERD.png)
