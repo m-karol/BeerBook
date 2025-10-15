@@ -15,3 +15,5 @@ Building and Running
 ```
 
 The site is served at http://localhost:8080
+
+ERD:
